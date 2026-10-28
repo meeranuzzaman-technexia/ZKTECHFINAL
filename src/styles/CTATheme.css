@@ -1,0 +1,45 @@
+/* Primary consultation button: project blue theme */
+.cta a.btn.btn--project {
+  border-color: #3752a5 !important;
+  background-color: #3752a5 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(55, 82, 165, 0.16);
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.cta a.btn.btn--project > span {
+  color: inherit !important;
+}
+
+.cta a.btn.btn--project:hover,
+.cta a.btn.btn--project:focus-visible {
+  border-color: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #3752a5 !important;
+  box-shadow: 0 10px 28px rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.cta a.btn.btn--project:focus-visible {
+  outline: 2px solid #3752a5;
+  outline-offset: 4px;
+}
+
+/* Match the animated overlay to the white hover surface. */
+.cta a.btn.btn--project::before {
+  background-color: #ffffff !important;
+}
+
+/* Reduced-motion support */
+@media (prefers-reduced-motion: reduce) {
+  .cta a.btn.btn--project {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* Bridge the site's existing tokens into shadcn/Tailwind semantic utilities. */
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --color-muted: var(--panel);
+  --color-muted-foreground: var(--dim);
+  --color-border: var(--line);
+  --color-primary: var(--violet);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+}
