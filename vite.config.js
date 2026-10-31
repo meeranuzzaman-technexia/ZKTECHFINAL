@@ -18,11 +18,23 @@ export default defineConfig({
     strictPort: true,
     // allow the sandbox preview proxy host (and any other host) to reach the dev server
     allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     host: true,
     port: 4173,
     strictPort: true,
     allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
+    },
   },
 })

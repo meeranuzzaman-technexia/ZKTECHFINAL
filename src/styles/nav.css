@@ -204,6 +204,36 @@
 .menu__link:hover {
   color: var(--violet-lt);
 }
+/* sub-links under a main menu entry (e.g. Portfolio → Business Profile ↗) */
+.menu__sub {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0.15rem 0 0.6rem 0.2rem;
+  padding-left: 1.05rem;
+  border-left: 1px solid var(--line);
+}
+.menu__sublink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.35s;
+}
+.menu__sublink span {
+  font-size: 0.85em;
+  transition: transform 0.35s var(--ease);
+}
+.menu__sublink:hover {
+  color: var(--violet-lt);
+}
+.menu__sublink:hover span {
+  transform: translate(2px, -2px);
+}
 .menu__side {
   align-self: center;
   display: grid;

@@ -105,7 +105,7 @@ export default function Footer() {
         </nav>
 
         <nav className="footer__links" aria-label="Footer navigation">
-          <a href={`${LIVE}/pages/about-us.php`}>About</a>
+          <a href="#manifesto" onClick={handleSectionClick}>About</a>
           <a href="#services" onClick={handleSectionClick}>Services</a>
           <a href="#contact" onClick={handleSectionClick}>Contact</a>
         </nav>

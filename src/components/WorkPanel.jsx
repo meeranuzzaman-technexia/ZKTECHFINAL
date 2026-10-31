@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from '../lib/gsap'
-import { featured, projects } from '../data/site'
+import { featured, projects, BUSINESS_PROFILE } from '../data/site'
 import '../styles/WorkPanel.css'
 
 function getProjectTags(project) {
@@ -50,6 +50,9 @@ function getProjectImages(project) {
 
 export default function WorkPanel() {
   const sectionRef = useRef(null)
+  /* deep-link landings (#contact) scroll past this section while images are
+     still lazy-loading, which shifts the layout mid-glide — load eagerly. */
+  const eager = typeof window !== 'undefined' && Boolean(window.location.hash)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -124,7 +127,7 @@ export default function WorkPanel() {
                 <div className="work-project__identity">
                   <h3 className="work-project__title">{project.name}</h3>
 
-                  <a
+                  {/* <a
                     className="work-project__link"
                     href={project.href || '#'}
                     aria-label={`View the ${project.name} case study`}
@@ -133,7 +136,7 @@ export default function WorkPanel() {
                     <span className="work-project__arrow" aria-hidden="true">
                       →
                     </span>
-                  </a>
+                  </a> */}
                 </div>
 
                 <p className="work-project__summary">
@@ -172,7 +175,7 @@ export default function WorkPanel() {
                             className="work-project__image"
                             src={image.src}
                             alt={image.alt}
-                            loading="lazy"
+                            loading={eager ? 'eager' : 'lazy'}
                             decoding="async"
                           />
                         </figure>
@@ -185,6 +188,24 @@ export default function WorkPanel() {
           </article>
         )
       })}
+
+      <div className="work-panel__cta-wrap">
+        <div className="portfolio-cta">
+          <p className="portfolio-cta__line">
+            The highlight reel ends here — hundreds more live launches, case
+            studies and brand stories are waiting in the vault.
+          </p>
+          <a
+            className="btn btn--lg portfolio-cta__btn"
+            href={BUSINESS_PROFILE}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>See More Portfolio</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
     </section>
   )
 }

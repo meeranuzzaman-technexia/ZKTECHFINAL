@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from '../lib/gsap'
-import { LIVE, contact, navLinks, menuServices, menuCompany } from '../data/site'
+import { contact, navLinks, menuServices } from '../data/site'
 import { lockScroll, scrollToTarget } from '../hooks/useSmoothScroll'
 
 export default function Nav() {
@@ -62,11 +62,12 @@ export default function Nav() {
   }, [open])
 
   const go = (href) => (e) => {
-    if (href.startsWith('#')) {
-      e.preventDefault()
-      setOpen(false)
-      setTimeout(() => scrollToTarget(href), 450)
-    }
+    if (!href.startsWith('#')) return
+
+    e.preventDefault()
+    const delay = open ? 450 : 0
+    setOpen(false)
+    setTimeout(() => scrollToTarget(href), delay)
   }
 
   return (
@@ -98,7 +99,7 @@ export default function Nav() {
         </div>
 
         <div className="nav__right">
-          <a className="nav__contact" href={`${LIVE}/pages/contact-us.php`} data-cursor="contact">
+          <a className="nav__contact" href="#contact" onClick={go('#contact')} data-cursor="contact">
             <span>Contact</span>
           </a>
         </div>
@@ -109,10 +110,34 @@ export default function Nav() {
         <div className="menu__grid" data-lenis-prevent>
           <nav className="menu__links">
             {navLinks.map((l, i) => (
-              <a className="menu__link" key={l.label} href={l.href} onClick={go(l.href)}>
-                <span>{l.label}</span>
-                <small>{String(i + 1).padStart(2, '0')}</small>
-              </a>
+              <div className="menu__item" key={l.label}>
+                <a
+                  className="menu__link"
+                  href={l.href}
+                  onClick={go(l.href)}
+                  {...(l.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                >
+                  <span>{l.label}</span>
+                  <small>{String(i + 1).padStart(2, '0')}</small>
+                </a>
+                {l.sub?.length > 0 && (
+                  <ul className="menu__sub">
+                    {l.sub.map((s) => (
+                      <li key={s.label}>
+                        <a
+                          className="menu__sublink"
+                          href={s.href}
+                          onClick={go(s.href)}
+                          {...(s.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                        >
+                          {s.label}
+                          <span aria-hidden="true">↗</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -122,17 +147,7 @@ export default function Nav() {
               <ul>
                 {menuServices.map((s) => (
                   <li key={s.label}>
-                    <a href={s.href}>{s.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="menu__block">
-              <h4>Studio</h4>
-              <ul>
-                {menuCompany.map((s) => (
-                  <li key={s.label}>
-                    <a href={s.href}>{s.label}</a>
+                    <a href={s.href} onClick={go(s.href)}>{s.label}</a>
                   </li>
                 ))}
               </ul>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../lib/gsap'
 import { splitWords } from '../lib/split'
 import { getLenis } from '../hooks/useSmoothScroll'
-import { services, LIVE } from '../data/site'
+import { services, LIVE, BUSINESS_PROFILE } from '../data/site'
 import { WorksWheel } from '@/components/ui/works-wheel'
 
 export default function Services() {

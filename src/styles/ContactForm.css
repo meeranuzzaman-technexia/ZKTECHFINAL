@@ -1,0 +1,149 @@
+/* CTA contact form: reference layout, project fonts and color tokens. */
+.cta__form {
+  position: relative;
+  width: 100%;
+  max-width: 50rem;
+  font-family: var(--font-body);
+}
+
+.cta-form__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.4vw, 2rem);
+}
+
+.cta-form__field {
+  display: block;
+  min-width: 0;
+  margin-top: 1rem;
+}
+
+.cta-form__field > span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--dim);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.cta-form__field input,
+.cta-form__field textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0.45rem 0 0.75rem;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+
+.cta-form__field textarea {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.cta-form__field input:focus,
+.cta-form__field textarea:focus {
+  border-bottom-color: var(--violet-lt);
+  box-shadow: 0 1px 0 var(--violet-lt);
+}
+
+.cta-form__field input:focus-visible,
+.cta-form__field textarea:focus-visible {
+  outline: 0;
+}
+
+.cta-form__hp {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* The only actions below the form. */
+.cta__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.6rem;
+}
+
+.cta__ctas .split-cta:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.cta-form__status {
+  min-height: 1.5rem;
+  margin-top: 0.9rem;
+  color: var(--dim);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.cta-form__status.is-success {
+  color: #a7f3d0;
+}
+
+.cta-form__status.is-error {
+  color: #fecaca;
+}
+
+:root[data-theme='light'] .cta .cta-form__status.is-success {
+  color: #167047;
+}
+
+:root[data-theme='light'] .cta .cta-form__status.is-error {
+  color: #b42318;
+}
+
+/* Tablet and mobile: fields and the form/cards layout flow vertically. */
+@media (max-width: 1024px) {
+  .cta-form__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .cta__ctas {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .cta__ctas .split-cta {
+    width: min(82%, 14rem);
+    min-height: 2.85rem;
+    justify-content: space-between;
+    gap: 0.65rem;
+    padding-left: 1rem;
+    font-size: 0.62rem;
+  }
+
+  .cta__ctas .split-cta__icon {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-form__field input,
+  .cta-form__field textarea {
+    transition: none;
+  }
+}

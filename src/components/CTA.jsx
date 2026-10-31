@@ -1,10 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from '../lib/gsap'
-import { contact, LIVE } from '../data/site'
+import { contact } from '../data/site'
+import { scrollToTarget } from '../hooks/useSmoothScroll'
+import '../styles/ContactForm.css'
+
+const EMPTY_FORM = {
+  name: '',
+  email: '',
+  website: '',
+  message: '',
+  company: '',
+}
 
 export default function CTA() {
   const root = useRef(null)
   const [copied, setCopied] = useState(false)
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [sending, setSending] = useState(false)
+  const [status, setStatus] = useState({ type: '', message: '' })
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -27,7 +40,7 @@ export default function CTA() {
       )
 
       gsap.fromTo(
-        '.cta__note, .cta__ctas > *',
+        '.cta__form, .cta__ctas > *',
         { opacity: 0, y: 26 },
         {
           opacity: 1,
@@ -72,6 +85,53 @@ export default function CTA() {
     }
   }
 
+  const updateField = (event) => {
+    const { name, value } = event.target
+    setForm((current) => ({ ...current, [name]: value }))
+  }
+
+  const submitForm = async (event) => {
+    event.preventDefault()
+    if (sending) return
+
+    setSending(true)
+    setStatus({ type: '', message: '' })
+
+    try {
+      const response = await fetch('/api/contact.php', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      })
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Your message could not be sent. Please try again.')
+      }
+
+      setForm(EMPTY_FORM)
+      setStatus({
+        type: 'success',
+        message: 'Thank you! Your message has been sent successfully.',
+      })
+    } catch (error) {
+      const message = error instanceof TypeError
+        ? `The email service is currently unavailable. Please email ${contact.email}.`
+        : error.message
+      setStatus({ type: 'error', message })
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const goHome = (event) => {
+    event.preventDefault()
+    scrollToTarget('#home', { duration: 1.5 })
+  }
+
   return (
     <section className="cta" id="contact" ref={root}>
       <div className="shell">
@@ -101,37 +161,104 @@ export default function CTA() {
 
         <div className="cta__grid">
           <div>
-            <p className="cta__note lead" style={{ maxWidth: '52ch' }}>
-              Tell us what you are building. You will get a reply from a
-              strategist not a bot within one business day, with a straight
-              answer on scope, timeline and budget.
-            </p>
-
-            <div
-              className="cta__ctas"
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '0.6rem',
-                marginTop: '1.6rem',
-              }}
+            <form
+              className="cta__form"
+              id="cta-contact-form"
+              action="/api/contact.php"
+              method="post"
+              onSubmit={submitForm}
+              aria-busy={sending}
             >
-              <a
+              <div className="cta-form__row">
+                <label className="cta-form__field">
+                  <span>Your Name *</span>
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={updateField}
+                    autoComplete="name"
+                    maxLength={120}
+                    required
+                  />
+                </label>
+
+                <label className="cta-form__field">
+                  <span>Your Email *</span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={updateField}
+                    autoComplete="email"
+                    maxLength={190}
+                    required
+                  />
+                </label>
+              </div>
+
+              <label className="cta-form__field">
+                <span>Website</span>
+                <input
+                  type="text"
+                  name="website"
+                  value={form.website}
+                  onChange={updateField}
+                  autoComplete="url"
+                  inputMode="url"
+                  maxLength={255}
+                />
+              </label>
+
+              <label className="cta-form__field">
+                <span>Your Comment</span>
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={updateField}
+                  rows={3}
+                  maxLength={5000}
+                />
+              </label>
+
+              <div className="cta-form__hp" aria-hidden="true">
+                <label>
+                  Company
+                  <input
+                    type="text"
+                    name="company"
+                    value={form.company}
+                    onChange={updateField}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </label>
+              </div>
+
+            </form>
+
+            <div className="cta__ctas">
+              <button
                 className="btn split-cta split-cta--primary"
-                href={`${LIVE}/pages/contact-us.php`}
+                type="submit"
+                form="cta-contact-form"
+                disabled={sending}
                 data-cursor="contact"
               >
-                <span className="split-cta__label">Book a free consultation</span>
+                <span className="split-cta__label">
+                  {sending ? 'Sending...' : 'Book a free consultation'}
+                </span>
                 <span className="split-cta__icon" aria-hidden="true">
                   <svg viewBox="0 0 20 20" fill="none">
                     <path d="M5 15 15 5M7 5h8v8" />
                   </svg>
                 </span>
-              </a>
+              </button>
 
-              <a
+              {/* <a
                 className="btn split-cta split-cta--secondary"
-                href={`${LIVE}/pages/pricing.php`}
+                href="#home"
+                onClick={goHome}
                 data-cursor="pricing"
               >
                 <span className="split-cta__label">See pricing</span>
@@ -140,8 +267,16 @@ export default function CTA() {
                     <path d="M4 10h12M12 6l4 4-4 4" />
                   </svg>
                 </span>
-              </a>
+              </a> */}
             </div>
+
+            <p
+              className={`cta-form__status${status.type ? ` is-${status.type}` : ''}`}
+              role="status"
+              aria-live="polite"
+            >
+              {status.message}
+            </p>
           </div>
 
           <div className="cta__cards">

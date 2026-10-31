@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { gsap, ScrollTrigger } from './lib/gsap'
-import useSmoothScroll from './hooks/useSmoothScroll'
+import useSmoothScroll, { scrollToTarget } from './hooks/useSmoothScroll'
 
 import Preloader from './components/Preloader'
 import Cursor from './components/Cursor'
@@ -48,6 +48,67 @@ export default function App() {
     document.body.classList.add('is-locked')
     window.scrollTo(0, 0)
   }, [])
+
+  /* deep link support (#contact etc.): the preloader locks the body while it
+     runs, so a hash scroll fired on mount gets swallowed. Wait until `ready`
+     (loader done + body unlocked), glide to the target with Lenis, then keep
+     re-aiming while lazy images / fonts shift the layout — and hard-land once
+     everything has settled, unless the user takes over scrolling. */
+  useEffect(() => {
+    if (!ready) return
+    const hash = window.location.hash
+    if (!hash) return
+
+    const findEl = () => {
+      try {
+        return document.querySelector(hash)
+      } catch {
+        return null
+      }
+    }
+    if (!findEl()) return
+
+    let userTookOver = false
+    const events = ['wheel', 'touchstart', 'keydown']
+    const mark = () => {
+      userTookOver = true
+    }
+    events.forEach((ev) => window.addEventListener(ev, mark, { passive: true, once: true }))
+
+    const glide = (duration) => scrollToTarget(hash, { duration })
+    const first = window.setTimeout(() => glide(1.4), 400)
+
+    const interval = window.setInterval(() => {
+      if (userTookOver) {
+        window.clearInterval(interval)
+        return
+      }
+      const el = findEl()
+      if (!el) return
+      if (Math.abs(el.getBoundingClientRect().top) < 120) {
+        window.clearInterval(interval)
+        return
+      }
+      glide(0.9)
+    }, 700)
+
+    const settle = window.setTimeout(() => {
+      window.clearInterval(interval)
+      if (userTookOver) return
+      const el = findEl()
+      if (!el) return
+      if (Math.abs(el.getBoundingClientRect().top) > 120) {
+        scrollToTarget(hash, { immediate: true })
+      }
+    }, 6000)
+
+    return () => {
+      window.clearTimeout(first)
+      window.clearTimeout(settle)
+      window.clearInterval(interval)
+      events.forEach((ev) => window.removeEventListener(ev, mark))
+    }
+  }, [ready])
 
   const handleLoaded = useCallback(() => {
     document.body.classList.remove('is-locked')

@@ -526,3 +526,55 @@ select {
     transform: none !important;
   }
 }
+
+/* Exit CTA at the end of the portfolio section — points to the external
+   business-profile site. The work panel stays black in both themes, so all
+   colours here are theme-independent on purpose. */
+.work-panel__cta-wrap {
+  width: min(100%, 1640px);
+  margin-inline: auto;
+  padding: 0 clamp(24px, 2.5vw, 40px) 96px;
+}
+.portfolio-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem 2.5rem;
+  padding: clamp(1.4rem, 3vw, 2.2rem) clamp(1.4rem, 3vw, 2.4rem);
+  border: 1px solid var(--work-line);
+  border-radius: clamp(12px, 1.5vw, 22px);
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(55, 82, 165, 0.22), transparent 62%),
+    rgba(255, 255, 255, 0.02);
+}
+.portfolio-cta__line {
+  max-width: 52ch;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.9;
+  color: var(--work-muted);
+}
+.portfolio-cta__btn {
+  flex: none;
+  /* inherit the panel's own theme vars (--work-text flips between the dark
+     and light themes) so the button stays visible in both modes */
+  --btn-ink: var(--work-text);
+  border-color: var(--work-line);
+}
+:root[data-theme='light'] .portfolio-cta {
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(55, 82, 165, 0.1), transparent 62%),
+    rgba(23, 23, 23, 0.02);
+}
+@media (max-width: 700px) {
+  .portfolio-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .work-panel__cta-wrap {
+    padding-bottom: 64px;
+  }
+}

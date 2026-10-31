@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { gsap } from '../lib/gsap'
 import { splitWords } from '../lib/split'
-import { heroWords, LIVE } from '../data/site'
+import { heroWords } from '../data/site'
 import { scrollToTarget } from '../hooks/useSmoothScroll'
 import Marquee from './Marquee'
 
@@ -121,6 +121,11 @@ export default function Hero({ ready }) {
 
   const total = KICKER_WORDS.length
 
+  const goToSection = (target) => (event) => {
+    event.preventDefault()
+    scrollToTarget(target, { duration: 1.5 })
+  }
+
   return (
     <section className="hero" id="home" ref={root}>
       {/* Background Animated Video */}
@@ -181,7 +186,8 @@ export default function Hero({ ready }) {
           <div className="hero__ctas">
             <a
               className="btn split-cta split-cta--primary"
-              href={`${LIVE}/pages/contact-us.php`}
+              href="#contact"
+              onClick={goToSection('#contact')}
               data-cursor="let's talk"
             >
               <span className="split-cta__label">Start a project</span>
@@ -191,10 +197,10 @@ export default function Hero({ ready }) {
                 </svg>
               </span>
             </a>
-            <button
-              type="button"
+            <a
               className="btn split-cta split-cta--secondary"
-              onClick={() => scrollToTarget('#work')}
+              href="#work"
+              onClick={goToSection('#work')}
               data-cursor="scroll"
             >
               <span className="split-cta__label">See our work</span>
@@ -203,7 +209,7 @@ export default function Hero({ ready }) {
                   <path d="M4 10h12M12 6l4 4-4 4" />
                 </svg>
               </span>
-            </button>
+            </a>
           </div>
 
           {/* Service switch: typographic, gliding underline */}

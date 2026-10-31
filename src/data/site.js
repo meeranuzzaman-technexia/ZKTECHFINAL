@@ -4,6 +4,9 @@
 
 export const LIVE = 'https://www.zktechsolutions.org'
 
+/* External business-profile site — opened in a new tab from the menu + services CTA */
+export const BUSINESS_PROFILE = 'https://zktech-business-profile.vercel.app/'
+
 export const contact = {
   email: 'support@zktechsolutions.org',
   phoneLabel: '+1 (346) 904-4486',
@@ -16,30 +19,20 @@ export const contact = {
 }
 
 export const navLinks = [
-  { label: 'Home', href: `${LIVE}/`, index: '01' },
-  { label: 'About Us', href: `${LIVE}/pages/about-us.php` },
-  { label: 'Services', href: `${LIVE}/pages/services.php` },
-  { label: 'Our Work', href: '#work' },
-  { label: 'Pricing', href: `${LIVE}/pages/pricing.php` },
-  { label: 'Blog', href: `${LIVE}/pages/blog-writing.php` },
-  { label: 'Contact Us', href: `${LIVE}/pages/contact-us.php` },
+  { label: 'Home', href: '#home', index: '01' },
+  { label: 'About Us', href: '#manifesto' },
+  { label: 'Portfolio', href: BUSINESS_PROFILE, external: true },
+  { label: 'Services', href: '#services' },
+  { label: 'Contact Us', href: '#contact' },
 ]
 
 export const menuServices = [
-  { label: 'Website Development', href: `${LIVE}/pages/website-dev.php` },
-  { label: 'Mobile Applications', href: `${LIVE}/pages/mobile-application.php` },
-  { label: 'SEO Optimization', href: `${LIVE}/pages/seo-optimization.php` },
-  { label: 'Logo & Brand Identity', href: `${LIVE}/pages/logo.php` },
-  { label: 'Social Media Marketing', href: `${LIVE}/pages/social-media-marketing.php` },
-  { label: 'Motion Graphics', href: `${LIVE}/pages/motion-graphics.php` },
-]
-
-export const menuCompany = [
-  { label: 'About Us', href: `${LIVE}/pages/about-us.php` },
-  { label: 'Why Us', href: `${LIVE}/pages/why-us.php` },
-  { label: 'Pricing', href: `${LIVE}/pages/pricing.php` },
-  { label: 'FAQs', href: `${LIVE}/pages/faqs.php` },
-  { label: 'Contact', href: `${LIVE}/pages/contact-us.php` },
+  { label: 'Website Development', href: '#services' },
+  { label: 'Mobile Applications', href: '#services' },
+  { label: 'SEO Optimization', href: '#services' },
+  { label: 'Logo & Brand Identity', href: '#services' },
+  { label: 'Social Media Marketing', href: '#services' },
+  { label: 'Motion Graphics', href: '#services' },
 ]
 
 // ---- Hero (image-1 reference: 3D cluster + floating service labels) --------
